@@ -9,21 +9,38 @@ import UIKit
 
 class QuoteViewController: UIViewController {
 
+    //MARK: - Outlets
+    @IBOutlet weak var quoteLabel: UILabel!
+    
+    //MARK: Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        fetchQuote()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    //MARK: - Actions
+    //dismiss modal
+    @IBAction func xButtonTapped(_ sender: Any) {
+        dismiss(animated: true)
     }
-    */
+    
+    
+    //MARK: - Helper Methods
+    //fetching quote with fetchQuote completion handler
+    private func fetchQuote() {
+        QuoteManager.shared.fetchQuote { result in
+            switch result {
+            case .success(let quote):
+                //main thread so quote shows for view controller
+                DispatchQueue.main.async {
+                    self.quoteLabel.text = "\(quote.quote)\n\n- \(quote.author)"
+                }
+                QuoteManager().saveQuote(quote: quote)
+            case .failure(let error):
+                print("Error: \(error)")
+            }
+        }
+    }
 
 }
