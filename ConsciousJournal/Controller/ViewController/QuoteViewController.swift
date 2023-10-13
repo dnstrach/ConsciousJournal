@@ -9,30 +9,28 @@ import UIKit
 
 class QuoteViewController: UIViewController {
 
-    //MARK: - Outlets
+    // MARK: - Outlets
     @IBOutlet weak var quoteLabel: UILabel!
     
-    //MARK: Lifecycle Methods
+    // MARK: Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         fetchQuote()
     }
     
-    //MARK: - Actions
-    //dismiss modal
+    // MARK: - Actions
     @IBAction func xButtonTapped(_ sender: Any) {
         dismiss(animated: true)
     }
     
     
     //MARK: - Helper Methods
-    //fetching quote with fetchQuote completion handler
     private func fetchQuote() {
         QuoteManager.shared.fetchQuote { result in
             switch result {
             case .success(let quote):
-                //main thread so quote shows for view controller
+                // main thread so quote shows for view controller
                 DispatchQueue.main.async {
                     self.quoteLabel.text = "\(quote.quote)\n\n- \(quote.author)"
                 }

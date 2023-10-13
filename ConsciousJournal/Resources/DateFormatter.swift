@@ -7,7 +7,8 @@
 
 import Foundation
 
-//formats date --> month/date/year
+//formats date --> month/day/year
+//used to display short style in home tableview cells
 extension DateFormatter {
     static let journalEntryDate: DateFormatter = {
         let formatter = DateFormatter()

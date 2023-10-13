@@ -11,12 +11,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "Custom")!, NSAttributedString.Key.font: UIFont(name: "Avenir Next Regular", size: 20)!], for: UIControl.State.normal)
-        
-        
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "Custom")!, NSAttributedString.Key.font: UIFont(name: "Avenir Next Regular", size: 20)!], for: UIControl.State.highlighted)
-        
+
         return true
     }
 

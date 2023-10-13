@@ -7,11 +7,11 @@
 
 import CoreData
 
-//CoreData stack can also be found in app delegate
-//enum constants are public, static and final
-//using enum instead of class or else remove static and create shared singleton whenever referencing variables or functions in CoreDataStack
+// CoreData stack can also be found in app delegate
+// enum constants are public, static and final
+// using enum instead of class or else remove static and create shared singleton whenever referencing variables or functions in CoreDataStack
 enum CoreDataStack {
-    //NSPersistent container holds data objects
+    // NSPersistent container holds data objects
     static let journalContainer: NSPersistentContainer = {
         //container name matches entity name
         let journalContainer = NSPersistentContainer(name: "Journal")
@@ -23,7 +23,7 @@ enum CoreDataStack {
         return journalContainer
     }()
 
-    //context tracks changes in data objects saved in container
+    // context tracks changes in data objects saved in container
     static var journalContext: NSManagedObjectContext { journalContainer.viewContext }
 
     static func saveJournalContext() {

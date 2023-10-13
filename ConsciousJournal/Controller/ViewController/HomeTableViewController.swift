@@ -9,20 +9,16 @@ import UIKit
 import CoreData
 
 class HomeTableViewController: UITableViewController {
-    //MARK: - Properties
+    // MARK: - Properties
     var fetchedResultsController: NSFetchedResultsController<Journal>!
     let viewContext = CoreDataStack.journalContext
     
-    //MARK: - Outlets
+    // MARK: - Outlets
     @IBOutlet var journalTableView: UITableView!
-    @IBOutlet weak var journalSearchBar: UISearchBar!
     
-    //MARK: - Lifecycle Methods
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        journalSearchBar.delegate = self
-        journalSearchBar.text = ""
         
         loadSavedData()
         navBarSetup()
@@ -34,7 +30,7 @@ class HomeTableViewController: UITableViewController {
         
         loadSavedData()
         
-        //need to reload table each time home view appears or else added entries will only show when re-running the app
+        // need to reload table each time home view appears or else added entries will only show when re-running the app
         journalTableView.reloadData()
         
     }
@@ -69,16 +65,14 @@ class HomeTableViewController: UITableViewController {
     }
     
     func navBarSetup() {
-        //journalTableView.backgroundColor = UIColor(red: 164/255, green: 161/255, blue: 168/255, alpha: 1.0)
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Kohinoor Bangla", size: 20)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Kohinoor Bangla", size: 25)!]
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         if offset > 1 { // Or choose any desired offset
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "DarkGrayPurple")
-        }else if offset == 0 {
+        } else if offset == 0 {
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "GrayPurple")
         }
     }
@@ -102,13 +96,13 @@ class HomeTableViewController: UITableViewController {
         
         let sectionInfo = sections[section]
         
-        if let date = dateFromString(dateString: sectionInfo.name) {
+        if let date = sectionDateFromString(dateString: sectionInfo.name) {
             let monthYearString = convertToMonthYearFormat(date: date)
             return monthYearString
         } else {
             return ""
         }
-
+        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -130,13 +124,11 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "journalCell", for: indexPath)
         
-        //NSFETCHRESULTSCONTROLLER
+        // NSFETCHRESULTSCONTROLLER
         let journalEntry = fetchedResultsController.object(at: indexPath)
         
-        //look into how to use UI configuration
         var newContent = cell.defaultContentConfiguration()
         
-        //cell text = journal entry date
         newContent.text = DateFormatter.journalEntryDate.string(from: journalEntry.journalEntryDate ?? Date())
         newContent.textProperties.font = UIFont(name: "Avenir Next Regular", size: 20)!
         
@@ -148,7 +140,7 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive,
                                               title: "Delete") { [weak self] _, _, complete in
-        
+            
             let journalEntry = self!.fetchedResultsController.object(at: indexPath)
             JournalManager.shared.deleteJournalEntry(journalEntry: journalEntry)
             
@@ -228,7 +220,7 @@ extension HomeTableViewController: NSFetchedResultsControllerDelegate {
 }
 
 extension HomeTableViewController {
-    func dateFromString(dateString: String) -> Date? {
+    func sectionDateFromString(dateString: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z" // Replace with your date format
         return dateFormatter.date(from: dateString)
@@ -240,34 +232,3 @@ extension HomeTableViewController {
         return dateFormatter.string(from: date)
     }
 }
-
-extension HomeTableViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            fetchedResultsController.fetchRequest.predicate = nil
-        } else {
-            let calendar = Calendar.current
-            let components: Set<Calendar.Component> = [.day]
-            let searchDate = calendar.date(from: calendar.dateComponents(components, from: dateFromString(dateString: searchText)!))
-            
-            let predicate = NSPredicate(format: "journalEntryDate == %@", searchDate! as CVarArg)
-            fetchedResultsController.fetchRequest.predicate = predicate
-        }
-        
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print("Error fetching data: \(error.localizedDescription)")
-        }
-        
-        tableView.reloadData()
-    }
-    
-}
-
-
-
-
-
-

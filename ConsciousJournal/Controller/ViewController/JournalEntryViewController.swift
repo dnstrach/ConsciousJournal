@@ -8,7 +8,7 @@
 import UIKit
 
 class JournalEntryViewController: UIViewController {
-
+    
     //MARK: - Properties
     var journalEntries: Journal?
     let seenWarningModalKey = "seenWarningModal"
@@ -51,7 +51,7 @@ class JournalEntryViewController: UIViewController {
         presentAlert()
         
     }
-
+    
     //MARK: - Actions
     @IBAction func saveButtonTapped(_ sender: Any) {
         
@@ -60,12 +60,14 @@ class JournalEntryViewController: UIViewController {
         let journalEntryDate = datePicker.date
         
         let monthSection = datePicker.date
-          
+        
         if let journalEntry = journalEntries {
             JournalManager.shared.updateJournalEntry(journalEntry: journalEntry, journalEntryDate: journalEntryDate, entryText: entryText)
         } else {
             JournalManager.shared.createJournalEntry(journalEntryDate: journalEntryDate, monthSection: monthSection, entryText: entryText)
         }
+        
+        print(journalEntryDate)
         
         //dismiss nav controller after tapping save
         self.navigationController?.popViewController(animated: true)
@@ -73,12 +75,12 @@ class JournalEntryViewController: UIViewController {
     
     
     //MARK: - Helper Methods
-//    func monthDayYearConversion(date: Date) {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//
-//        let formattedDate = dateFormatter.string(from: date)
-//    }
+    //    func monthDayYearConversion(date: Date) {
+    //        let dateFormatter = DateFormatter()
+    //        dateFormatter.dateFormat = "yyyy-MM-dd"
+    //
+    //        let formattedDate = dateFormatter.string(from: date)
+    //    }
     
     func textViewShadow() {
         
@@ -107,9 +109,9 @@ class JournalEntryViewController: UIViewController {
         present(alert, animated: true) {
             self.userHasSeenModal = true
         }
-
+        
     }
-
+    
 }
 
 extension JournalEntryViewController: UITextViewDelegate {

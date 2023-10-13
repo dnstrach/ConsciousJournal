@@ -9,15 +9,16 @@ import CoreData
 
 class JournalManager {
     
-    //MARK: - Properties
-    //Shared Instance
+    // MARK: - Properties
+    // Shared Instance
     static let shared = JournalManager()
     
-    //Source of Truth
-//    var journalEntries: [Journal] = []
+    // no longer need array with NSFetchResultsController
+    // Source of Truth
+    //    var journalEntries: [Journal] = []
     
-    //Fetch request of type Journal from CoreData with computed property which returns all Journal entries saved in Journal entity
-    //Predicate is not necessary because fetching all journal entries in database
+    // Fetch request of type Journal from CoreData with computed property which returns all Journal entries saved in Journal entity
+    // Predicate is not necessary because fetching all journal entries in database
     var journalFetchRequest: NSFetchRequest<Journal> = {
         let request = NSFetchRequest<Journal>(entityName: "Journal")
         return request
@@ -25,11 +26,12 @@ class JournalManager {
     
     
     //MARK: - CRUD
-    //create
+    // create
     func createJournalEntry(journalEntryDate: Date, monthSection: Date, entryText: String) {
         
+        // converting month section to be first day of month plus month and year so that journal entry dates will sorted by month/year
         guard let monthSection = monthAndYearConversion(from: journalEntryDate) else { return }
-
+        
         //initialized with monthSection value
         let journalEntry = Journal(journalEntryDate: journalEntryDate, monthSection: monthSection, entryText: entryText)
         
@@ -38,16 +40,16 @@ class JournalManager {
         
     }
     
-    //update
+    // update
     func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, entryText: String) {
         journalEntry.journalEntryDate = journalEntryDate
         journalEntry.entryText = entryText
         
-        //saving updated entry to CoreData
+        // saving updated entry to CoreData
         CoreDataStack.saveJournalContext()
     }
     
-    //delete
+    // delete
     func deleteJournalEntry(journalEntry: Journal) {
         
         //deleting journal entry built in delete function with CoreData
