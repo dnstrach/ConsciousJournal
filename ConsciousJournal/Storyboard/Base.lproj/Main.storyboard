@@ -107,8 +107,10 @@
                         <constraints>
                             <constraint firstItem="Ocl-21-VQ1" firstAttribute="top" secondItem="YaS-R5-H5w" secondAttribute="top" constant="15" id="0o7-Oq-hl5"/>
                             <constraint firstItem="Ocl-21-VQ1" firstAttribute="leading" secondItem="YaS-R5-H5w" secondAttribute="leading" id="FyE-P6-10U"/>
-                            <constraint firstItem="YaS-R5-H5w" firstAttribute="trailing" secondItem="Xi2-1T-Uei" secondAttribute="trailing" constant="50" id="GqW-Gh-Z1D"/>
+                            <constraint firstItem="YaS-R5-H5w" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Xi2-1T-Uei" secondAttribute="trailing" id="GqW-Gh-Z1D"/>
+                            <constraint firstItem="Xi2-1T-Uei" firstAttribute="leading" secondItem="YaS-R5-H5w" secondAttribute="leading" constant="50" id="Hzv-5t-yMw"/>
                             <constraint firstItem="ygO-Va-ux9" firstAttribute="top" secondItem="Ocl-21-VQ1" secondAttribute="bottom" id="JoF-He-jyg"/>
+                            <constraint firstItem="YaS-R5-H5w" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ocl-21-VQ1" secondAttribute="trailing" symbolic="YES" id="LRZ-oz-Kqt"/>
                             <constraint firstItem="YaS-R5-H5w" firstAttribute="bottom" secondItem="ygO-Va-ux9" secondAttribute="bottom" id="Qut-j3-Jed"/>
                             <constraint firstItem="Xi2-1T-Uei" firstAttribute="centerX" secondItem="YaS-R5-H5w" secondAttribute="centerX" id="RW0-kK-WTo"/>
                             <constraint firstItem="ygO-Va-ux9" firstAttribute="leading" secondItem="Kn3-EN-UbY" secondAttribute="leading" id="TxC-nK-b6t"/>
