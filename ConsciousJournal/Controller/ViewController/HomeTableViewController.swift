@@ -70,7 +70,7 @@ class HomeTableViewController: UITableViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
-        if offset > 1 { // Or choose any desired offset
+        if offset > 0 { 
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "DarkGrayPurple")
         } else if offset == 0 {
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "GrayPurple")
@@ -131,6 +131,10 @@ class HomeTableViewController: UITableViewController {
         
         newContent.text = DateFormatter.journalEntryDate.string(from: journalEntry.journalEntryDate ?? Date())
         newContent.textProperties.font = UIFont(name: "Avenir Next Regular", size: 20)!
+        
+        newContent.secondaryText = DateFormatter.journalEntryDateDay.string(from: journalEntry.journalEntryDate ?? Date())
+        newContent.secondaryTextProperties.font = UIFont(name: "Avenir Next Regular", size: 15)!
+        newContent.secondaryTextProperties.color = .darkGrayPurple
         
         cell.contentConfiguration = newContent
         

@@ -16,4 +16,10 @@ extension DateFormatter {
         return formatter
         
     }()
+    
+    static let journalEntryDateDay: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        return formatter
+    }()
 }
