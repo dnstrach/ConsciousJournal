@@ -22,6 +22,7 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
         
         searchBar.delegate = self
+        searchBar.tintColor = UIColor(named: "DarkGrayPurple")
         
         loadSavedData()
         navBarSetup()
@@ -244,34 +245,6 @@ extension HomeTableViewController {
     }
 }
 
-//extension HomeTableViewController: UISearchBarDelegate {
-//    
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        
-//        let request = JournalManager.shared.journalFetchRequest
-//        
-//        if !searchText.isEmpty {
-//            // Create a predicate to filter by journalEntryDate
-//            let shortDatePredicate = NSPredicate(format: "journalDateString CONTAINS[cd] %@", searchText)
-//            request.predicate = shortDatePredicate
-//
-//        } else {
-//           request.predicate = nil // Remove the predicate if the search text is empty
-//        }
-//        
-//        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: viewContext, sectionNameKeyPath: "monthSection", cacheName: nil)
-//        fetchedResultsController.delegate = self
-//        
-//        do {
-//            try fetchedResultsController.performFetch()
-//            tableView.reloadData()
-//        } catch {
-//            print("Fetch failed")
-//        }
-//    }
-//
-//}
-
 extension HomeTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -292,20 +265,26 @@ extension HomeTableViewController: UISearchBarDelegate {
         }
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        if searchBar.text?.isEmpty ?? true {
-            searchBar.text = nil
-            searchBar.resignFirstResponder()
-            fetchedResultsController.fetchRequest.predicate = nil
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+           searchBar.setShowsCancelButton(true, animated: true)
+           return true
+       }
 
-            do {
-                try fetchedResultsController.performFetch()
-                tableView.reloadData()
-            } catch {
-                print("Fetch failed")
-            }
-        }
-    }
+
+       func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+           searchBar.text = nil
+           searchBar.resignFirstResponder()
+           searchBar.setShowsCancelButton(false, animated: true)
+
+           fetchedResultsController.fetchRequest.predicate = nil
+
+           do {
+               try fetchedResultsController.performFetch()
+               tableView.reloadData()
+           } catch {
+               print("Fetch failed")
+           }
+       }
+    
 }
-
 
