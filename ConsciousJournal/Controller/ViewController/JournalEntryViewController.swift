@@ -61,13 +61,19 @@ class JournalEntryViewController: UIViewController {
         
         let monthSection = datePicker.date
         
+        let journalDateString = dateToString(date: journalEntryDate)
+        
+        let monthYearString = dateToMonthYearString(date: journalEntryDate)
+        
         if let journalEntry = journalEntries {
-            JournalManager.shared.updateJournalEntry(journalEntry: journalEntry, journalEntryDate: journalEntryDate, entryText: entryText)
+            JournalManager.shared.updateJournalEntry(journalEntry: journalEntry, journalEntryDate: journalEntryDate, journalDateString: journalDateString, entryText: entryText, monthYearString: monthYearString)
         } else {
-            JournalManager.shared.createJournalEntry(journalEntryDate: journalEntryDate, monthSection: monthSection, entryText: entryText)
+            JournalManager.shared.createJournalEntry(journalEntryDate: journalEntryDate, journalDateString: journalDateString, monthSection: monthSection, monthYearString: monthYearString, entryText: entryText)
         }
         
         print(journalEntryDate)
+        print(journalDateString)
+        print(monthSection)
         
         //dismiss nav controller after tapping save
         self.navigationController?.popViewController(animated: true)
@@ -75,12 +81,22 @@ class JournalEntryViewController: UIViewController {
     
     
     //MARK: - Helper Methods
-    //    func monthDayYearConversion(date: Date) {
-    //        let dateFormatter = DateFormatter()
-    //        dateFormatter.dateFormat = "yyyy-MM-dd"
-    //
-    //        let formattedDate = dateFormatter.string(from: date)
-    //    }
+    func dateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        
+        let shortDateString = dateFormatter.string(from: date)
+        
+        return shortDateString
+    }
+    
+    func dateToMonthYearString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yyyy"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
+    }
     
     func textViewShadow() {
         

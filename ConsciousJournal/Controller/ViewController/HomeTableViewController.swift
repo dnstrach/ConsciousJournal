@@ -15,10 +15,13 @@ class HomeTableViewController: UITableViewController {
     
     // MARK: - Outlets
     @IBOutlet var journalTableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.delegate = self
         
         loadSavedData()
         navBarSetup()
@@ -180,6 +183,10 @@ extension HomeTableViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         
+        
+        //need to add move and update cases
+        //add monthsection to update in journalManager
+        //currently rows are not updated to move to correct section if date is changed
         switch type {
         case .insert:
             tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
@@ -236,3 +243,69 @@ extension HomeTableViewController {
         return dateFormatter.string(from: date)
     }
 }
+
+//extension HomeTableViewController: UISearchBarDelegate {
+//    
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        
+//        let request = JournalManager.shared.journalFetchRequest
+//        
+//        if !searchText.isEmpty {
+//            // Create a predicate to filter by journalEntryDate
+//            let shortDatePredicate = NSPredicate(format: "journalDateString CONTAINS[cd] %@", searchText)
+//            request.predicate = shortDatePredicate
+//
+//        } else {
+//           request.predicate = nil // Remove the predicate if the search text is empty
+//        }
+//        
+//        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: viewContext, sectionNameKeyPath: "monthSection", cacheName: nil)
+//        fetchedResultsController.delegate = self
+//        
+//        do {
+//            try fetchedResultsController.performFetch()
+//            tableView.reloadData()
+//        } catch {
+//            print("Fetch failed")
+//        }
+//    }
+//
+//}
+
+extension HomeTableViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchText.isEmpty {
+            let shortDatePredicate = NSPredicate(format: "journalDateString CONTAINS[cd] %@", searchText)
+            let monthYearPredicate = NSPredicate(format: "monthYearString CONTAINS[cd] %@", searchText)
+            let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [shortDatePredicate, monthYearPredicate])
+            fetchedResultsController.fetchRequest.predicate = compoundPredicate
+        } else {
+            fetchedResultsController.fetchRequest.predicate = nil
+        }
+        
+        do {
+            try fetchedResultsController.performFetch()
+            tableView.reloadData()
+        } catch {
+            print("Fetch failed")
+        }
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        if searchBar.text?.isEmpty ?? true {
+            searchBar.text = nil
+            searchBar.resignFirstResponder()
+            fetchedResultsController.fetchRequest.predicate = nil
+
+            do {
+                try fetchedResultsController.performFetch()
+                tableView.reloadData()
+            } catch {
+                print("Fetch failed")
+            }
+        }
+    }
+}
+
+

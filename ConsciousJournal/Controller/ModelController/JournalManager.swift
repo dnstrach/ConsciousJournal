@@ -27,23 +27,30 @@ class JournalManager {
     
     //MARK: - CRUD
     // create
-    func createJournalEntry(journalEntryDate: Date, monthSection: Date, entryText: String) {
+    func createJournalEntry(journalEntryDate: Date, journalDateString: String, monthSection: Date, monthYearString: String, entryText: String) {
         
         // converting month section to be first day of month plus month and year so that journal entry dates will sorted by month/year
         guard let monthSection = monthAndYearConversion(from: journalEntryDate) else { return }
         
+        guard let journalDateString = dateToString(date: journalEntryDate) else { return }
+        
+        guard let monthYearString = dateToMonthYearString(date: journalEntryDate) else { return }
+        
         //initialized with monthSection value
-        let journalEntry = Journal(journalEntryDate: journalEntryDate, monthSection: monthSection, entryText: entryText)
+        let journalEntry = Journal(journalEntryDate: journalEntryDate, journalDateString: journalDateString, monthSection: monthSection, monthYearString: monthYearString, entryText: entryText)
         
         //saving created entry to CoreData
         CoreDataStack.saveJournalContext()
         
     }
     
+    //ADD monthsection to update
     // update
-    func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, entryText: String) {
+    func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, journalDateString: String, entryText: String, monthYearString: String) {
         journalEntry.journalEntryDate = journalEntryDate
+        journalEntry.journalDateString = dateToString(date: journalEntryDate)
         journalEntry.entryText = entryText
+        journalEntry.monthYearString = dateToMonthYearString(date: journalEntryDate)
         
         // saving updated entry to CoreData
         CoreDataStack.saveJournalContext()
@@ -73,5 +80,21 @@ extension JournalManager {
         
         // Create a new date with the first day components
         return calendar.date(from: firstDayComponents)
+    }
+    
+    func dateToString(date: Date) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        let shortDateString = dateFormatter.string(from: date)
+        
+        return shortDateString
+    }
+    
+    func dateToMonthYearString(date: Date) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yyyy"
+        let dateString = dateFormatter.string(from: date)
+        
+        return dateString
     }
 }
