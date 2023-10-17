@@ -32,6 +32,7 @@ class JournalEntryViewController: UIViewController {
         super.viewDidLoad()
         
         entryTextView.delegate = self
+        entryTextView.layer.cornerRadius = 20
         
         //if else condition to set title for adding entry view controller and updating entry view controller
         if let journalEntry = journalEntries,
@@ -47,7 +48,6 @@ class JournalEntryViewController: UIViewController {
             placeholderLabel.text = "Gratitude \nThoughts \nAffirmations"
         }
         
-        textViewShadow()
         presentAlert()
         
     }
@@ -96,16 +96,6 @@ class JournalEntryViewController: UIViewController {
         let dateString = dateFormatter.string(from: date)
         
         return dateString
-    }
-    
-    func textViewShadow() {
-        
-        entryTextView.layer.shadowColor = UIColor(named: "DarkGrayPurple")?.cgColor
-        entryTextView.layer.shadowOffset = CGSize(width: -4.0, height: 4.0)
-        entryTextView.layer.shadowRadius = 3.0
-        entryTextView.layer.shadowOpacity = 1.0
-        entryTextView.layer.masksToBounds = false
-        entryTextView.layer.cornerRadius = 20
     }
     
     func presentAlert() {
