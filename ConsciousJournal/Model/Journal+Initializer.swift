@@ -9,9 +9,6 @@ import CoreData
 
 extension Journal {
     
-    
-    //make journalDateString
-    
     convenience init(context: NSManagedObjectContext = CoreDataStack.journalContext, journalEntryDate: Date, journalDateString: String, monthSection: Date, monthYearString: String, entryText: String) {
         self.init(context: context)
         self.journalEntryDate = journalEntryDate

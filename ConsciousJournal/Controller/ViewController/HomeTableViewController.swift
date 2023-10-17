@@ -42,7 +42,6 @@ class HomeTableViewController: UITableViewController {
     //MARK: - Helpers
     func loadSavedData() {
         if fetchedResultsController == nil {
-            //let request = NSFetchRequest<Journal>(entityName: "Journal")
             let request = JournalManager.shared.journalFetchRequest
             //sort both entryDate and monthSection
             let sectionSort = NSSortDescriptor(key: "journalEntryDate", ascending: false)
@@ -50,10 +49,7 @@ class HomeTableViewController: UITableViewController {
             request.sortDescriptors = [sectionSort, rowSort]
             request.fetchBatchSize = 20
             
-            
             fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: viewContext, sectionNameKeyPath: "monthSection", cacheName: nil)
-            //        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: viewContext, sectionNameKeyPath: "journalEntryDate", cacheName: nil)
-            
             
             fetchedResultsController.delegate = self
         }
@@ -74,7 +70,7 @@ class HomeTableViewController: UITableViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
-        if offset > 0 { 
+        if offset > 0 {
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "DarkGrayPurple")
         } else if offset == 0 {
             self.navigationController?.navigationBar.barTintColor = UIColor(named: "GrayPurple")
@@ -128,7 +124,6 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "journalCell", for: indexPath)
         
-        // NSFETCHRESULTSCONTROLLER
         let journalEntry = fetchedResultsController.object(at: indexPath)
         
         var newContent = cell.defaultContentConfiguration()
@@ -192,7 +187,7 @@ extension HomeTableViewController: NSFetchedResultsControllerDelegate {
         case .update:
             let indexSet = IndexSet(integer: sectionIndex)
             tableView.reloadSections(indexSet, with: .fade)
-        //will not be used in this app
+            //will not be used in this app
         case .move:
             print("section moved")
             
@@ -237,7 +232,7 @@ extension HomeTableViewController: NSFetchedResultsControllerDelegate {
 extension HomeTableViewController {
     func sectionDateFromString(dateString: String) -> Date? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z" // Replace with your date format
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         return dateFormatter.date(from: dateString)
     }
     
@@ -250,6 +245,7 @@ extension HomeTableViewController {
 
 extension HomeTableViewController: UISearchBarDelegate {
     
+    //search by short date style and month year
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
             let shortDatePredicate = NSPredicate(format: "journalDateString CONTAINS[cd] %@", searchText)
@@ -269,25 +265,25 @@ extension HomeTableViewController: UISearchBarDelegate {
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-           searchBar.setShowsCancelButton(true, animated: true)
-           return true
-       }
-
-
-       func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-           searchBar.text = nil
-           searchBar.resignFirstResponder()
-           searchBar.setShowsCancelButton(false, animated: true)
-
-           fetchedResultsController.fetchRequest.predicate = nil
-
-           do {
-               try fetchedResultsController.performFetch()
-               tableView.reloadData()
-           } catch {
-               print("Fetch failed")
-           }
-       }
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
+    // cancel button to dismiss keyboard 
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+        
+        fetchedResultsController.fetchRequest.predicate = nil
+        
+        do {
+            try fetchedResultsController.performFetch()
+            tableView.reloadData()
+        } catch {
+            print("Fetch failed")
+        }
+    }
     
 }
 

@@ -10,7 +10,6 @@ import CoreData
 class JournalManager {
     
     // MARK: - Properties
-    // Shared Instance
     static let shared = JournalManager()
     
     // no longer need array with NSFetchResultsController
@@ -32,8 +31,10 @@ class JournalManager {
         // converting month section to be first day of month plus month and year so that journal entry dates will sorted by month/year
         guard let monthSection = monthAndYearConversion(from: journalEntryDate) else { return }
         
+        // used to search journal entries by short date style
         guard let journalDateString = dateToString(date: journalEntryDate) else { return }
         
+        // used to search journal entries by month year section
         guard let monthYearString = dateToMonthYearString(date: journalEntryDate) else { return }
         
         //initialized with monthSection value
@@ -44,8 +45,6 @@ class JournalManager {
         
     }
     
-    //ADD monthsection to update
-    // update
     func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, journalDateString: String, monthSection: Date, entryText: String, monthYearString: String) {
         journalEntry.journalEntryDate = journalEntryDate
         journalEntry.journalDateString = dateToString(date: journalEntryDate)
@@ -57,7 +56,6 @@ class JournalManager {
         CoreDataStack.saveJournalContext()
     }
     
-    // delete
     func deleteJournalEntry(journalEntry: Journal) {
         
         //deleting journal entry built in delete function with CoreData
