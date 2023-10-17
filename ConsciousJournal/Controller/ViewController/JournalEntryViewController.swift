@@ -12,6 +12,8 @@ class JournalEntryViewController: UIViewController {
     //MARK: - Properties
     var journalEntries: Journal?
     let seenWarningModalKey = "seenWarningModal"
+    var tapGesture: UITapGestureRecognizer!
+
     
     //computed property to track wether or not the user has seen warning alert by saving bool value into user defaults
     var userHasSeenModal: Bool {
@@ -50,6 +52,9 @@ class JournalEntryViewController: UIViewController {
         
         presentAlert()
         
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        view.addGestureRecognizer(tapGesture)
+        
     }
     
     //MARK: - Actions
@@ -82,6 +87,11 @@ class JournalEntryViewController: UIViewController {
     
     
     //MARK: - Helper Methods
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        // Dismiss the keyboard
+        view.endEditing(true)
+    }
+    
     func dateToString(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -117,6 +127,10 @@ class JournalEntryViewController: UIViewController {
             self.userHasSeenModal = true
         }
         
+    }
+    
+    deinit {
+        view.removeGestureRecognizer(tapGesture)
     }
     
 }
