@@ -184,15 +184,18 @@ extension HomeTableViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         
-        
-        //need to add move and update cases
-        //add monthsection to update in journalManager
-        //currently rows are not updated to move to correct section if date is changed
         switch type {
         case .insert:
             tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
         case .delete:
             tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .update:
+            let indexSet = IndexSet(integer: sectionIndex)
+            tableView.reloadSections(indexSet, with: .fade)
+        //will not be used in this app
+        case .move:
+            print("section moved")
+            
         @unknown default:
             break
         }

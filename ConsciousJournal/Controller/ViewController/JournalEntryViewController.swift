@@ -66,7 +66,7 @@ class JournalEntryViewController: UIViewController {
         let monthYearString = dateToMonthYearString(date: journalEntryDate)
         
         if let journalEntry = journalEntries {
-            JournalManager.shared.updateJournalEntry(journalEntry: journalEntry, journalEntryDate: journalEntryDate, journalDateString: journalDateString, entryText: entryText, monthYearString: monthYearString)
+            JournalManager.shared.updateJournalEntry(journalEntry: journalEntry, journalEntryDate: journalEntryDate, journalDateString: journalDateString, monthSection: monthSection, entryText: entryText, monthYearString: monthYearString)
         } else {
             JournalManager.shared.createJournalEntry(journalEntryDate: journalEntryDate, journalDateString: journalDateString, monthSection: monthSection, monthYearString: monthYearString, entryText: entryText)
         }
@@ -77,6 +77,7 @@ class JournalEntryViewController: UIViewController {
         
         //dismiss nav controller after tapping save
         self.navigationController?.popViewController(animated: true)
+        
     }
     
     

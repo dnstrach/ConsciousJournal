@@ -46,9 +46,10 @@ class JournalManager {
     
     //ADD monthsection to update
     // update
-    func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, journalDateString: String, entryText: String, monthYearString: String) {
+    func updateJournalEntry(journalEntry: Journal, journalEntryDate: Date, journalDateString: String, monthSection: Date, entryText: String, monthYearString: String) {
         journalEntry.journalEntryDate = journalEntryDate
         journalEntry.journalDateString = dateToString(date: journalEntryDate)
+        journalEntry.monthSection = monthAndYearConversion(from: journalEntryDate)
         journalEntry.entryText = entryText
         journalEntry.monthYearString = dateToMonthYearString(date: journalEntryDate)
         

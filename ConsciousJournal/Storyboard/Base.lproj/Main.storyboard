@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vqS-50-lts">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -203,35 +204,6 @@
             </objects>
             <point key="canvasLocation" x="1078.6046511627908" y="-161.58798283261802"/>
         </scene>
-        <!--Sleep Tracker-->
-        <scene sceneID="q1S-jm-dsN">
-            <objects>
-                <tableViewController id="MIT-1r-6Lf" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Y7G-RB-H4F">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="cSI-S4-1kO">
-                                <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cSI-S4-1kO" id="4A3-xj-57o">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="MIT-1r-6Lf" id="8S3-9X-gTK"/>
-                            <outlet property="delegate" destination="MIT-1r-6Lf" id="qXo-zN-Uj7"/>
-                        </connections>
-                    </tableView>
-                    <tabBarItem key="tabBarItem" title="Sleep Tracker" image="bed.double" catalog="system" id="DAL-02-3do"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hUm-Oa-t8H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1860" y="679"/>
-        </scene>
         <!--Journal Entries-->
         <scene sceneID="BIa-PY-Y9r">
             <objects>
@@ -258,7 +230,6 @@
     <resources>
         <image name="Line" width="876" height="62"/>
         <image name="Tree" width="1080" height="1920"/>
-        <image name="bed.double" catalog="system" width="128" height="82"/>
         <image name="book" catalog="system" width="128" height="99"/>
         <image name="pencil.line" catalog="system" width="128" height="117"/>
         <image name="quote.bubble.fill" catalog="system" width="128" height="110"/>
@@ -275,9 +246,6 @@
         </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>
