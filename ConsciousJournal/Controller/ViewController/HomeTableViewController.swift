@@ -40,6 +40,7 @@ class HomeTableViewController: UITableViewController {
     }
     
     //MARK: - Helpers
+    // Loads saved data from Core Data using a fetched results controller.
     func loadSavedData() {
         if fetchedResultsController == nil {
             let request = JournalManager.shared.journalFetchRequest

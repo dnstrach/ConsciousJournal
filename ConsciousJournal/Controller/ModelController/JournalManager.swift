@@ -12,7 +12,7 @@ class JournalManager {
     // MARK: - Properties
     static let shared = JournalManager()
     
-    // no longer need array with NSFetchResultsController
+    // no longer need source of truth with NSFetchResultsController
     // Source of Truth
     //    var journalEntries: [Journal] = []
     
@@ -28,7 +28,7 @@ class JournalManager {
     // create
     func createJournalEntry(journalEntryDate: Date, journalDateString: String, monthSection: Date, monthYearString: String, entryText: String) {
         
-        // converting month section to be first day of month plus month and year so that journal entry dates will sorted by month/year
+        // converting month section to be first day of month plus month and year so that journal entry dates will be sorted by month/year
         guard let monthSection = monthAndYearConversion(from: journalEntryDate) else { return }
         
         // used to search journal entries by short date style
@@ -37,7 +37,6 @@ class JournalManager {
         // used to search journal entries by month year section
         guard let monthYearString = dateToMonthYearString(date: journalEntryDate) else { return }
         
-        //initialized with monthSection value
         let journalEntry = Journal(journalEntryDate: journalEntryDate, journalDateString: journalDateString, monthSection: monthSection, monthYearString: monthYearString, entryText: entryText)
         
         //saving created entry to CoreData
@@ -67,20 +66,22 @@ class JournalManager {
 }
 
 extension JournalManager {
+    
+    //Converts a given date to the first day of its month and year.
+    //dates can now be grouped by month and year for sections
     func monthAndYearConversion(from date: Date) -> Date? {
         // Get the calendar and components
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month], from: date)
         
-        // Set the day component to 1 (first day of the month)
         var firstDayComponents = DateComponents()
         firstDayComponents.year = components.year
         firstDayComponents.month = components.month
-        
-        // Create a new date with the first day components
+
         return calendar.date(from: firstDayComponents)
     }
     
+    //used to search journal entry as short date style
     func dateToString(date: Date) -> String? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -89,6 +90,7 @@ extension JournalManager {
         return shortDateString
     }
     
+    // used to search journal entry by month and year
     func dateToMonthYearString(date: Date) -> String? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM yyyy"

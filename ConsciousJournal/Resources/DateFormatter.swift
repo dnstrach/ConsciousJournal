@@ -10,6 +10,7 @@ import Foundation
 //formats date --> month/day/year
 //used to display short style in home tableview cells
 extension DateFormatter {
+    //returns MM/DD/YYYY for U.S. or date style depending on user's locale
     static let journalEntryDate: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -17,6 +18,7 @@ extension DateFormatter {
         
     }()
     
+    //returns day of the week
     static let journalEntryDateDay: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
