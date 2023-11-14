@@ -12,9 +12,12 @@ class JournalEntryViewController: UIViewController {
     //MARK: - Properties
     var journalEntries: Journal?
     let seenWarningModalKey = "seenWarningModal"
+    // used for dismissing keyboard
     var tapGesture: UITapGestureRecognizer!
+    // Original content inset and offset for adjusting the UITextView when the keyboard appears
+    var originalContentInset: UIEdgeInsets!
+    var originalContentOffset: CGPoint!
 
-    
     //computed property to track wether or not the user has seen warning alert by saving bool value into user defaults
     var userHasSeenModal: Bool {
         set {
@@ -36,7 +39,7 @@ class JournalEntryViewController: UIViewController {
         entryTextView.delegate = self
         entryTextView.layer.cornerRadius = 20
         
-        //if else condition to set title for adding entry view controller and updating entry view controller
+        // If there is an existing journal entry, populate the view with its data
         if let journalEntry = journalEntries,
            let journalEntryDate = journalEntry.journalEntryDate {
             
@@ -44,6 +47,7 @@ class JournalEntryViewController: UIViewController {
             entryTextView.text = journalEntry.entryText
         }
         
+        // Hide the placeholder label if text is not empty
         if !entryTextView.text.isEmpty {
             placeholderLabel.isHidden = true
         }else if entryTextView.text.isEmpty {
@@ -52,9 +56,23 @@ class JournalEntryViewController: UIViewController {
         
         presentAlert()
         
+        // Set up a tap gesture recognizer to dismiss the keyboard
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         view.addGestureRecognizer(tapGesture)
         
+        // Store the original content inset and offset
+        originalContentInset = entryTextView.contentInset
+        originalContentOffset = entryTextView.contentOffset
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        subscribeToKeyboardNotifications()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unsubscribeFromKeyboardNotifications()
     }
     
     //MARK: - Actions
@@ -130,6 +148,7 @@ class JournalEntryViewController: UIViewController {
     }
     
     deinit {
+        // Remove the tap gesture recognizer when the view is deinitialized
         view.removeGestureRecognizer(tapGesture)
     }
     
@@ -137,6 +156,7 @@ class JournalEntryViewController: UIViewController {
 
 extension JournalEntryViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        // Hide the placeholder label based on text content
         let placeholderLabel = textView.subviews.first { $0 is UILabel } as? UILabel
         placeholderLabel?.isHidden = !textView.text.isEmpty
     }
@@ -149,4 +169,35 @@ extension JournalEntryViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         placeholderLabel.isHidden = true
     }
+    
+    func subscribeToKeyboardNotifications() {
+          NotificationCenter.default.addObserver(self,
+                                                 selector: #selector(keyboardWillShow(_:)),
+                                                 name: UIResponder.keyboardWillShowNotification,
+                                                 object: nil)
+          NotificationCenter.default.addObserver(self,
+                                                 selector: #selector(keyboardWillHide(_:)),
+                                                 name: UIResponder.keyboardWillHideNotification,
+                                                 object: nil)
+      }
+
+      func unsubscribeFromKeyboardNotifications() {
+          NotificationCenter.default.removeObserver(self)
+      }
+
+      @objc func keyboardWillShow(_ notification: Notification) {
+          // Adjust the content inset to make room for the keyboard when it appears
+          if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+              // Adjust the content inset to make room for the keyboard
+              entryTextView.contentInset.bottom = keyboardSize.height
+              entryTextView.verticalScrollIndicatorInsets.bottom = keyboardSize.height
+          }
+      }
+
+      @objc func keyboardWillHide(_ notification: Notification) {
+          // Restore the original content inset and offset when the keyboard is hidden
+          entryTextView.contentInset = originalContentInset
+          entryTextView.verticalScrollIndicatorInsets = originalContentInset
+          entryTextView.contentOffset = originalContentOffset
+      }
 }
